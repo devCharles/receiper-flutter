@@ -1,2 +1,3 @@
-# receiper-flutter
-Flutter app that saves receipes and generate its nutritional values
+# Reciper
+
+Create your own receipe and this app will tell you complete information about it
