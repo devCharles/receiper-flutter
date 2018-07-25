@@ -66,6 +66,7 @@ class _RegisterState extends State<Register> {
         body: ListView(
           padding: EdgeInsets.all(16.0),
           children: <Widget>[
+//            Nombre
             Container(
             color: Colors.lime,
             padding: EdgeInsets.all(16.0),
@@ -86,27 +87,50 @@ class _RegisterState extends State<Register> {
             )
             ),
 
+//            ingredientes
             Container(
               height: 250.0,
-                color: Colors.orangeAccent,
+                color: Colors.white,
                 padding: EdgeInsets.all(16.0),
-                child: TextField(
-//            onChanged: (string) => debugPrint("Ingredients list"),
-                    autofocus: false,
-                    controller: _userController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.white70
-                            )
-                        ),
-                        hintText: "Ingredients",
-                        icon: Icon(Icons.fastfood),
-                        fillColor: Colors.black26
+//                child: ListView(
+                  child:
+
+                    ListView.builder(
+                      padding: EdgeInsets.all(16.0),
+                      itemExtent: 40.0,
+                      itemBuilder: (BuildContext context, int index) {
+
+                        return Text('Ingredient $index',
+                        style: TextStyle(
+                            color: Colors.black
+                          ),
+                        );
+
+                        },
                     )
-                )
+
+
+
+//                children: TextField(
+////            onChanged: (string) => debugPrint("Ingredients list"),
+//                    autofocus: false,
+//                    controller: _userController,
+//                    decoration: InputDecoration(
+//                        border: OutlineInputBorder(
+//                            borderSide: BorderSide(
+//                                color: Colors.white70
+//                            )
+//                        ),
+//                        hintText: "Ingredients",
+//                        icon: Icon(Icons.fastfood),
+//                        fillColor: Colors.black26
+//                    )
+//                )
+
+//              )
             ),
 
+//            boton imagen
             Container(
                 color: Colors.greenAccent,
                 padding: EdgeInsets.all(16.0),
