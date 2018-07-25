@@ -1,51 +1,68 @@
 import 'package:flutter/material.dart';
 
-final nutrientData = {
-  "CA": {"amount": 37.5, "unit": "mg"},
-  "CHOCDF": {"amount": 342.1, "unit": "g"},
-  "CHOLE": {"amount": 16.561, "unit": "mg"},
-  "ENERC_KCAL": {"amount": 2135.9, "unit": "kcal"},
-  "FAT": {"amount": 67.51, "unit": "g"},
-  "FE": {"amount": 18.2, "unit": "mg"},
-  "FIBTG": {"amount": 12.90, "unit": "g"},
-  "FOLAC": {"amount": 385.0, "unit": "mcg"},
-  "K": {"amount": 676.7, "unit": "mg"},
-  "MG": {"amount": 133.07, "unit": "mg"},
-  "NA": {"amount": 1038.89, "unit": "mg"},
-  "NIA": {"amount": 19.49, "unit": "mg"},
-  "P": {"amount": 381.19, "unit": "mg"},
-  "PROCNT": {"amount": 35.99, "unit": "g"},
-  "RIBF": {"amount": 1.6, "unit": "mg"},
-  "SE": {"amount": 84.75, "unit": "mcg"},
-  "SUGAR": {"amount": 74.49, "unit": "g"},
-  "THIA": {"amount": 2.74, "unit": "mg"},
-  "VITA_IU": {"amount": 5.0, "unit": "IU"},
-  "VITB6A": {"amount": 0.11, "unit": "mg"},
-  "VITD": {"amount": 28.39, "unit": "IU"},
-  "VITK1": {"amount": 0.75, "unit": "mcg"},
-  "ZN": {"amount": 2.93, "unit": "mg"},
-  "SATFAT": {"amount": 4.2, "unit": "g"},
-  "TRANSFAT": {"amount": 4.2, "unit": "g"},
-  "FIBER": {"amount": 4.23456, "unit": "g"},
-};
+class NutritionFacts extends StatefulWidget {
+  final nutrientData;
+  NutritionFacts({@required this.nutrientData}) : assert(nutrientData != null);
+  NutritionFactsState createState() =>
+      NutritionFactsState(nutrientData: nutrientData);
+}
 
-Widget nutrientValues() {
+class NutritionFactsState extends State<NutritionFacts> {
+  final nutrientData;
+
+  //Need to type it as Map<String,num>
+  NutritionFactsState({@required this.nutrientData})
+      : assert(nutrientData != null);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+      padding: EdgeInsets.all(40.0),
+      color: Colors.white,
+      child: nutrientWidget(nutrientData: nutrientData),
+    ));
+  }
+}
+
+Widget nutrientWidget({nutrientData}) {
+  return Container(
+    padding: EdgeInsets.all(1.0),
+    decoration:
+        BoxDecoration(border: new Border.all(color: Colors.black, width: 2.0)),
+    child: Container(
+      padding: EdgeInsets.all(2.0),
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          nutriHeader(calories: 23, servings: 3, servingSize: "8 oz."),
+          nutrientValues(nutrientData: nutrientData),
+          vitaminValues(nutrientData: nutrientData),
+          footerCalories(),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget nutrientValues({nutrientData}) {
   //final n = (1.3456).toStringAsFixed(2);
   //final s = double.parse("1.2345");
   final nutrientTypes = [
-    {"nutrient": "FAT", "name": "Total Fat", "sub": false},
-    {"nutrient": "SATFAT", "name": "Saturated Fat", "sub": true},
-    {"nutrient": "TRANSFAT", "name": "Trans Fat", "sub": true},
-    {"nutrient": "CHOLE", "name": "Cholesterol", "sub": false},
-    {"nutrient": "NA", "name": "Sodium", "sub": false},
+    {"nutrient": "FAT", "name": "Total Fat", "sub": false, "dly": 65.0},
+    {"nutrient": "SATFAT", "name": "Saturated Fat", "sub": true, "dly": 20.0},
+    {"nutrient": "TRANSFAT", "name": "Trans Fat", "sub": true, "dly": null},
+    {"nutrient": "CHOLE", "name": "Cholesterol", "sub": false, "dly": 300.0},
+    {"nutrient": "NA", "name": "Sodium", "sub": false, "dly": 2400.0},
     {
       "nutrient": "CHOCDF",
       "name": "Total Carbohidrate",
       "sub": false,
+      "dly": 300.0,
     },
-    {"nutrient": "FIBER", "name": "Dietary Fiber", "sub": true},
-    {"nutrient": "SUGAR", "name": "Sugars", "sub": true},
-    {"nutrient": "PROCNT", "name": "Protein", "sub": false}
+    {"nutrient": "FIBTG", "name": "Dietary Fiber", "sub": true, "dly": 25.0},
+    {"nutrient": "SUGAR", "name": "Sugars", "sub": true, "dly": null},
+    {"nutrient": "PROCNT", "name": "Protein", "sub": false, "dly": 50.0},
   ];
 
   return Column(
@@ -54,7 +71,7 @@ Widget nutrientValues() {
         .map((d) => nutrientLiner(
               nutrientName: d["name"],
               qty: nutrientData["${d["nutrient"]}"]["amount"],
-              ptg: 0,
+              ptg: nutrientData["${d["nutrient"]}"]["amount"] * 100 / d["dly"],
               sub: d["sub"],
               unit: nutrientData["${d["nutrient"]}"]["unit"],
             ))
@@ -62,7 +79,36 @@ Widget nutrientValues() {
   );
 }
 
-Widget nutriHeader() {
+Widget vitaminValues({nutrientData}) {
+  //final n = (1.3456).toStringAsFixed(2);
+  //final s = double.parse("1.2345");
+  final nutrientTypes = [
+    {"nutrient": "THIA", "name": "Thiamin", "sub": false, "dly": 1.5},
+    {"nutrient": "K", "name": "Potassium", "sub": false, "dly": 3500.0},
+    {"nutrient": "VITB6A", "name": "Vitamin B6", "sub": false, "dly": 2.0},
+    {"nutrient": "VITA_IU", "name": "Vitamin A", "sub": false, "dly": 5000},
+    {"nutrient": "VITD", "name": "Vitamin D", "sub": false, "dly": 400},
+    {"nutrient": "VITK1", "name": "Vitamin K ", "sub": false, "dly": 80},
+  ];
+  final vitaminLine = Container(
+      margin: EdgeInsetsDirectional.only(start: 1.0, end: 1.0),
+      height: 4.0,
+      color: Colors.black);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[vitaminLine] +
+        nutrientTypes
+            .map((d) => vitaminLiner(
+                  nutrientName: d["name"],
+                  qty: nutrientData["${d["nutrient"]}"]["amount"],
+                  ptg: nutrientData["${d["nutrient"]}"]["amount"],
+                  unit: nutrientData["${d["nutrient"]}"]["unit"],
+                ))
+            .toList(),
+  );
+}
+
+Widget nutriHeader({calories, servingSize, servings}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -73,12 +119,12 @@ Widget nutriHeader() {
             color: Colors.black, fontSize: 40.0, fontWeight: FontWeight.w700),
       ),
       Text(
-        "Serving Size 8 oz",
+        "Serving Size $servingSize",
         style: TextStyle(
             fontSize: 14.0, color: Colors.black, fontWeight: FontWeight.w400),
       ),
       Text(
-        "Servings Per Container 1.5",
+        "Servings Per Container $servings",
         style: TextStyle(
             fontSize: 14.0, color: Colors.black, fontWeight: FontWeight.w400),
       ),
@@ -99,12 +145,12 @@ Widget nutriHeader() {
       ),
       Row(children: <Widget>[
         Text(
-          "Calories ",
+          "Calories",
           style: TextStyle(
               fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w900),
         ),
         Text(
-          " 23",
+          " $calories",
           style: TextStyle(
               fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),
         ),
@@ -162,7 +208,6 @@ Widget nutrientLiner({
                   fontWeight: textWeight2),
             ),
             Expanded(
-                // margin: const EdgeInsets.only(left: 100.0, right: 1.0),
                 child: Text(
               ((ptg != null) ? "${ptg}%" : ""),
               textAlign: TextAlign.right,
@@ -170,6 +215,53 @@ Widget nutrientLiner({
                 fontSize: textSize,
                 color: Colors.black,
                 fontWeight: textWeight1,
+              ),
+            )),
+          ],
+        )
+      ]));
+}
+
+Widget vitaminLiner({
+  @required nutrientName,
+  @required qty,
+  ptg,
+  showQty: false,
+  unit: "g",
+}) {
+  final textSize = 15.0;
+  final textWeight = FontWeight.w500;
+  return Container(
+      padding: EdgeInsetsDirectional.only(start: 1.0, end: 1.0),
+      child: Column(children: <Widget>[
+        Container(
+            margin: EdgeInsetsDirectional.only(start: 1.0, end: 1.0),
+            height: 1.0,
+            color: Colors.black),
+        Row(
+          children: <Widget>[
+            Text(
+              nutrientName,
+              style: TextStyle(
+                  fontSize: textSize,
+                  color: Colors.black,
+                  fontWeight: textWeight),
+            ),
+            Text(
+              (showQty) ? "  ${qty}${unit}" : "",
+              style: TextStyle(
+                  fontSize: textSize,
+                  color: Colors.black,
+                  fontWeight: textWeight),
+            ),
+            Expanded(
+                child: Text(
+              ((ptg != null) ? "${ptg}%" : ""),
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                fontSize: textSize,
+                color: Colors.black,
+                fontWeight: textWeight,
               ),
             )),
           ],
