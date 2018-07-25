@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:recipes_app/Recipe.dart';
 
 
 
@@ -18,7 +17,7 @@ class PrincipalScreen extends StatelessWidget {
 
     var principalAppBar = AppBar(
       centerTitle: true,
-      backgroundColor: Colors.indigo.shade500,
+      backgroundColor: Color(0xFF4d5784),
       elevation: 1.2,
       title: Text(
         "Reciper",
@@ -40,10 +39,10 @@ class PrincipalScreen extends StatelessWidget {
     );
 
     var addOtherButton = FloatingActionButton(
-      backgroundColor: Colors.indigoAccent,
+      backgroundColor: Color(0xffff748a),
       child: Icon(
         Icons.add,
-        color: Colors.white,
+        color: Color(0xfffff2e5),
       ),
       onPressed: () => debugPrint("Add other"),
     );
@@ -53,7 +52,9 @@ class PrincipalScreen extends StatelessWidget {
     return Scaffold(
       appBar: principalAppBar,
       floatingActionButton: addOtherButton,
-      body: Column(
+      body: ListView(
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(5.0),
         children: recipes,
       )
     );

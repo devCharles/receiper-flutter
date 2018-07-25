@@ -1,16 +1,65 @@
 import 'package:flutter/material.dart';
 
+class RecipeInfo extends StatelessWidget {
+  final String type;
+  final String quantity;
+  final String unit;
+
+  RecipeInfo(
+      {Key key,
+        @required this.type,
+        @required this.quantity,
+        @required this.unit})
+      : assert(type != null),
+        assert(unit != null),
+        assert(quantity != null);
+
+
+
+  final Map<String, String> conversion = {
+    "FAT":"Fat",
+    "CHOCDF": "Carbohidrate",
+    "SUGAR": "Sugars",
+    "PROCNT": "Protein"
+  };
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      child: Row(
+        children: <Widget>[
+          Text(
+            "${conversion[type]} $quantity$unit",
+            style: TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 13.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+}
+
+
 class RecipeWidget extends StatelessWidget {
   final String nameOfRecipe;
   final String imageURL;
+  final List<List<String>> data;
   final onTap;
+
 
   RecipeWidget(
       {Key key,
       @required this.nameOfRecipe,
       @required this.imageURL,
+      @required this.data,
       this.onTap})
       : assert(nameOfRecipe != null),
+        assert(data != null),
         assert(imageURL != null);
 
   Widget recipeImage() {
@@ -29,6 +78,7 @@ class RecipeWidget extends StatelessWidget {
     );
   }
 
+
   Widget recipeCard() {
     return Container(
       height: 124.0,
@@ -46,22 +96,42 @@ class RecipeWidget extends StatelessWidget {
         ],
       ),
       child: Container(
-        margin: EdgeInsets.only(left: 46.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+        margin: EdgeInsets.only(left: 50.0, top: 26.0),
+        child: Column(
           children: <Widget>[
-            Text(
-              nameOfRecipe,
-              style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.black87,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  nameOfRecipe,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 0.0, top: 26.0),
+              height: 40.0,
+              child: ListView.builder(
+                itemCount: data.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return RecipeInfo(
+                    type: data[index][0],
+                    quantity: data[index][1],
+                    unit: data[index][2],
+                  );
+                },
               ),
             ),
           ],
-        ),
+        )
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
